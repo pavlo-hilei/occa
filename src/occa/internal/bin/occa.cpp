@@ -95,7 +95,8 @@ namespace occa {
       const bool promptCheck = !options["yes"];
 
       if (options["all"] &&
-          safeRmrf(env::OCCA_CACHE_DIR, promptCheck)) {
+          safeRmrf(env::OCCA_CACHE_DIR, promptCheck) &&
+          safeRmrf(env::OCCA_SOURCE_CACHE_DIR, promptCheck)) {
         printRemovedMessage(true);
         return true;
       }
@@ -103,9 +104,10 @@ namespace occa {
       bool removedSomething = false;
       if (options["kernels"]) {
         removedSomething |= safeRmrf(io::cachePath(), promptCheck);
+        removedSomething |= safeRmrf(io::sourceCachePath(), promptCheck);
       }
       if (options["locks"]) {
-        const std::string lockPath = env::OCCA_CACHE_DIR + "locks/";
+        const std::string lockPath = env::OCCA_SOURCE_CACHE_DIR + "locks/";
         removedSomething |= safeRmrf(lockPath, promptCheck);
       }
 
@@ -240,6 +242,7 @@ namespace occa {
       io::stdout << "  Basic:\n"
                  << "    - OCCA_DIR                   : " << envEcho("OCCA_DIR") << "\n"
                  << "    - OCCA_CACHE_DIR             : " << envEcho("OCCA_CACHE_DIR") << "\n"
+                 << "    - OCCA_SOURCE_CACHE_DIR      : " << envEcho("OCCA_SOURCE_CACHE_DIR") << "\n"
                  << "    - OCCA_VERBOSE               : " << envEcho("OCCA_VERBOSE") << "\n"
                  << "    - OCCA_UNSAFE                : " << OCCA_UNSAFE << "\n"
 
